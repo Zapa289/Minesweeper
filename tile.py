@@ -3,13 +3,14 @@ import pygame
 
 
 class Tile(pygame.sprite.Sprite):
-  def __init__(self, mine: tuple[int, int], location: tuple[int, int], proximity: int, surface: pygame.Surface):
+  def __init__(self, mine_row: int, mine_column: int, location: tuple[int, int], proximity: int, surface: pygame.Surface):
 
     super(Tile, self).__init__()
     self.surf = surface
     self.rect = self.surf.get_rect(topleft = location)
 
-    self.row, self.column = mine
+    self.row = mine_row
+    self.column = mine_column
     self.proximity = proximity
     self.isFlagged = False
     self.isClicked = False

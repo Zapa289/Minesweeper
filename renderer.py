@@ -32,7 +32,7 @@ class Renderer:
     for row_index, row in enumerate(minefield):
       x_pos = 0
       for col_index, proximity in enumerate(row):
-        tile = Tile((col_index, row_index), (x_pos, y_pos), proximity, self.textures.hidden)
+        tile = Tile(mine_row=row_index, mine_column=col_index, location=(x_pos, y_pos), proximity=proximity, surface=self.textures.hidden)
         self.tiles.add(tile)
         x_pos += tile_x_size
       y_pos += tile_y_size
@@ -75,6 +75,9 @@ class Renderer:
         tile.surf = self.textures.flag
       else:
         tile.surf = self.textures.hidden
+
+    pygame.draw.rect(self.screen, (255, 255, 255), tile.rect)
+    self.screen.blit(tile.surf, tile.rect)
 
   def update_timer(self, time: int) -> None:
     pass

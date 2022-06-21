@@ -7,6 +7,8 @@ from game import Game
 from minefield import Minefield
 from renderer import Renderer
 
+MOUSE_LEFT = 1
+MOUSE_RIGHT = 3
 
 def main() -> None:
   rows = 10
@@ -18,18 +20,24 @@ def main() -> None:
 
   game = Game(minefield, renderer)
 
-  running = True
-
-  while running:
+  while game.running:
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
-        running = False
+        game.running = False
+
+      # If we are in gameover, skip all button processing except quit
+      if game.gameover:
+        continue
 
       if event.type == pygame.MOUSEMOTION:
         game.handle_mouse_move(pygame.mouse.get_pos())
 
       if event.type == pygame.MOUSEBUTTONDOWN:
-        game.handle_mouse_down(pygame.mouse.get_pos())
+        if event.button == MOUSE_LEFT:
+          game.handle_mouse_down(pygame.mouse.get_pos())
+
+        if event.button == MOUSE_RIGHT:
+          game.toggle_flag(pygame.mouse.get_pos())
 
       if event.type == pygame.MOUSEBUTTONUP:
         game.handle_mouse_up()

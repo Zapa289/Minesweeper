@@ -91,6 +91,7 @@ class Minefield:
     return minefield
 
   def click_cascade(self, row: int, column: int, need_to_click: set) -> set[tuple[int,int]]:
+
     left_bound = column if column == 0 else column - 1
     right_bound = column if column == self.columns - 1 else column + 1
 
@@ -103,9 +104,10 @@ class Minefield:
         proximity = prox_row[col_index]
         if row_index == row and col_index == column:
           continue
-        if proximity == 0 and (row_index, col_index) not in need_to_click:
+        if proximity < 10 and (row_index, col_index) not in need_to_click:
           need_to_click.add((row_index, col_index))
-          self.click_cascade(row_index, col_index, need_to_click)
+          if proximity == 0:
+            self.click_cascade(row_index, col_index, need_to_click)
 
     return need_to_click
 
