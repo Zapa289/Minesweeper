@@ -23,6 +23,7 @@ class Tile(pygame.sprite.Sprite):
 
   def toggle_flag(self) -> None:
     self.isFlagged = not self.isFlagged
+    return self.isFlagged
 
   def update(self, screen: pygame.Surface) -> None:
     if self.isClicked:

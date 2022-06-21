@@ -8,6 +8,7 @@ from minefield import Minefield
 from renderer import Renderer
 
 MOUSE_LEFT = 1
+MOUSE_MIDDLE = 2
 MOUSE_RIGHT = 3
 
 def main() -> None:
@@ -38,6 +39,9 @@ def main() -> None:
 
         if event.button == MOUSE_RIGHT:
           game.toggle_flag(pygame.mouse.get_pos())
+
+        if event.button == MOUSE_MIDDLE:
+          game.group_click(pygame.mouse.get_pos())
 
       if event.type == pygame.MOUSEBUTTONUP:
         game.handle_mouse_up()

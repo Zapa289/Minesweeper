@@ -70,3 +70,6 @@ class Renderer:
   def update_timer(self, time: int) -> None:
     pass
 
+  def update_flag_count(self, flag_count: int) -> None:
+    pass
+
