@@ -51,7 +51,7 @@ class Game:
           if tile.proximity == 0:
             need_to_click = self.minefield.click_cascade(tile.row, tile.column, set())
             self.click_list(need_to_click)
-          self.renderer.tiles.update(self.renderer.screen)
+          tile.update(self.renderer.screen)
           self.start_timer()
 
   def handle_mouse_up(self) -> None:
@@ -67,7 +67,7 @@ class Game:
     for tile in self.renderer.tiles:
       if tile.rect.collidepoint(mouse_pos):
         tile.toggle_flag()
-        self.renderer.update_texture(tile)
+        tile.update(self.renderer.screen)
 
   def trigger_gameover(self):
     self.reveal_mines()
