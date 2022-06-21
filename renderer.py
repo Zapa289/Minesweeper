@@ -67,18 +67,6 @@ class Renderer:
     self.screen.blit(tile.surf, tile.rect)
     pygame.display.flip()
 
-  def update_texture(self, tile: Tile) -> None:
-    if tile.isClicked:
-      tile.surf = self.textures.proximity[tile.proximity]
-    else:
-      if tile.isFlagged:
-        tile.surf = self.textures.flag
-      else:
-        tile.surf = self.textures.hidden
-
-    pygame.draw.rect(self.screen, (255, 255, 255), tile.rect)
-    self.screen.blit(tile.surf, tile.rect)
-
   def update_timer(self, time: int) -> None:
     pass
 
