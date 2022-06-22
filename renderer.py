@@ -2,8 +2,11 @@
 import pygame
 from numpy import ndarray
 
-from textures import TILE_SIZE, Textures
-from tile import Tile
+from flag import FlagCounter
+from textures import Textures
+from tile import TILE_SIZE, Tile
+
+#from timer import Timer
 
 DEFAULT_X = 400
 DEFAULT_Y = 500
@@ -12,12 +15,14 @@ TRAY_GAP = 50
 
 TL_MINE = (0, TRAY_GAP)
 
+FLAG_COUNTER_X = 20
+FLAG_COUNTER_Y = TRAY_GAP // 2
+
 class Renderer:
   def __init__(self) -> None:
-    pygame.init()
-
     self.tiles = pygame.sprite.Group()
-
+    self.flag_counter = FlagCounter()
+    #self.timer = Timer()
     self.screen_size = (DEFAULT_X, DEFAULT_Y)
     self.screen = pygame.display.set_mode(self.screen_size)
     self.textures = Textures()
@@ -32,25 +37,38 @@ class Renderer:
     for row_index, row in enumerate(minefield):
       x_pos = 0
       for col_index, proximity in enumerate(row):
-        tile = Tile(mine_row=row_index, mine_column=col_index, location=(x_pos, y_pos), proximity=proximity, surface=self.textures.hidden)
+        tile = Tile(
+          mine_row=row_index,
+          mine_column=col_index,
+          location=(x_pos, y_pos),
+          proximity=proximity,
+          surface=pygame.transform.scale(self.textures.hidden,
+          TILE_SIZE)
+          )
         self.tiles.add(tile)
         x_pos += tile_x_size
       y_pos += tile_y_size
 
-    self.screen = pygame.display.set_mode((x_pos, y_pos))
+    self.screen_size = (x_pos, y_pos)
+    self.screen = pygame.display.set_mode(self.screen_size)
     self.screen.fill((255,255,255))
-    tray = self.textures.tray
-    tray = pygame.transform.scale(tray, (x_pos, TRAY_GAP))
-    self.screen.blit(tray, (0,0))
+
+    self.draw_tray()
 
     for tile in self.tiles:
       self.screen.blit(tile.surf, tile.rect)
 
     pygame.display.flip()
 
+  def draw_tray(self) -> None:
+    x_pos, _ = self.screen_size
+    tray = self.textures.tray
+    tray = pygame.transform.scale(tray, (x_pos, TRAY_GAP))
+    self.screen.blit(tray, (0,0))
+
   def redraw_field(self) -> None:
+    self.tiles.update()
     for tile in self.tiles:
-      self.update_texture(tile)
       self.screen.blit(tile.surf, tile.rect)
     pygame.display.flip()
 
@@ -71,5 +89,10 @@ class Renderer:
     pass
 
   def update_flag_count(self, flag_count: int) -> None:
-    pass
+    flag_counter_surface = self.flag_counter.update_flags(flag_count)
+    flag_counter_rect = flag_counter_surface.get_rect(left = FLAG_COUNTER_X, centery = FLAG_COUNTER_Y)
+
+    self.draw_tray()
+    self.screen.blit(flag_counter_surface, flag_counter_rect)
+    pygame.display.flip()
 

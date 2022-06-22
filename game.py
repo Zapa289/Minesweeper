@@ -19,12 +19,14 @@ class Game:
     self.clock = pygame.time.Clock()
     self.clock.tick(GAME_SPEED)
 
+    self.flag_count = minefield.number_of_mines
+
     self.renderer.create_field(self.minefield.minefield)
 
     self.running = True
     self.gameover = False
 
-    self.flag_count = minefield.number_of_mines
+    self.renderer.update_flag_count(self.flag_count)
 
   def start_timer(self) -> None:
     if not self.timer_running:
@@ -50,9 +52,6 @@ class Game:
           self.check_tile(tile)
           self.start_timer()
 
-  def handle_mouse_up(self) -> None:
-    pygame.display.flip()
-
   def check_tile(self, tile: Tile) -> None:
     if tile.proximity == 10:
       self.trigger_gameover()
@@ -72,8 +71,8 @@ class Game:
   def toggle_flag(self, mouse_pos: tuple[float, float]) -> None:
     for tile in self.renderer.tiles:
       if tile.rect.collidepoint(mouse_pos):
-        add_flag = tile.toggle_flag()
-        self.flag_count = self.flag_count + 1 if add_flag else self.flag_count - 1
+        is_flagged = tile.toggle_flag()
+        self.flag_count = self.flag_count - 1 if is_flagged else self.flag_count + 1
         tile.update(self.renderer.screen)
         self.renderer.update_flag_count(self.flag_count)
 

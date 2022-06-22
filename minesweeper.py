@@ -16,6 +16,8 @@ def main() -> None:
   columns = 10
   mines = testField.MINES
 
+  pygame.init()
+
   renderer = Renderer()
   minefield = Minefield(rows=rows, columns=columns, number_of_mines=mines)
 
@@ -44,7 +46,7 @@ def main() -> None:
           game.group_click(pygame.mouse.get_pos())
 
       if event.type == pygame.MOUSEBUTTONUP:
-        game.handle_mouse_up()
+        pygame.display.flip()
 
       if event.type == UPDATE_TIMER:
         game.tick_timer()

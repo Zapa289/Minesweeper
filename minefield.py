@@ -21,7 +21,6 @@ class Minefield:
     self.columns = columns
     self.number_of_mines = number_of_mines
     self.minefield = self.generate_board()
-    print(self.minefield)
 
   def generate_board(self) -> np.ndarray:
     """Create a 2D matrix of the Tile sprites."""
