@@ -16,34 +16,37 @@ TEXT_X = COUNTER_X - FLAG_X
 TEXT_Y = COUNTER_Y
 TEXT_SIZE = (TEXT_X, TEXT_Y)
 
-FONT = 'franklingothicmedium'
+FONT = "franklingothicmedium"
 FONT_SIZE = 25
-FONT_COLOR = (0,0,0)
+FONT_COLOR = (0, 0, 0)
 
 COLOR_KEY = (255, 53, 184)
 
+
 class FlagCounter:
-  def __init__(self):
-    self.font = pygame.font.SysFont(FONT, FONT_SIZE)
+    def __init__(self):
+        self.font = pygame.font.SysFont(FONT, FONT_SIZE)
 
-    self.surf = pygame.surface.Surface(size=COUNTER_SIZE)
-    self.surf.set_colorkey(COLOR_KEY)
+        self.surf = pygame.surface.Surface(size=COUNTER_SIZE)
+        self.surf.set_colorkey(COLOR_KEY)
 
-    self.text_surf = pygame.surface.Surface(size=TEXT_SIZE)
-    self.text_rect = self.text_surf.get_rect(right = COUNTER_X)
+        self.text_surf = pygame.surface.Surface(size=TEXT_SIZE)
+        self.text_rect = self.text_surf.get_rect(right=COUNTER_X)
 
-    self.flag_icon = pygame.transform.scale(textures.flag, FLAG_SIZE)
+        self.flag_icon = pygame.transform.scale(textures.flag, FLAG_SIZE)
 
-  def update_flags(self, flags: int) -> pygame.Surface:
+    def update_flags(self, flags: int) -> pygame.Surface:
 
-    self.surf.blit(self.flag_icon, self.flag_icon.get_rect())
+        self.surf.blit(self.flag_icon, self.flag_icon.get_rect())
 
-    font_surface = self.font.render(str(flags), False, FONT_COLOR, COLOR_KEY)
-    font_rect = font_surface.get_rect(right = COUNTER_X - FLAG_X, centery = COUNTER_Y // 2)
+        font_surface = self.font.render(str(flags), False, FONT_COLOR, COLOR_KEY)
+        font_rect = font_surface.get_rect(
+            right=COUNTER_X - FLAG_X, centery=COUNTER_Y // 2
+        )
 
-    self.text_surf.fill(COLOR_KEY)
-    self.text_surf.blit(font_surface, font_rect)
+        self.text_surf.fill(COLOR_KEY)
+        self.text_surf.blit(font_surface, font_rect)
 
-    self.surf.blit(self.text_surf, self.text_rect)
+        self.surf.blit(self.text_surf, self.text_rect)
 
-    return self.surf
+        return self.surf
