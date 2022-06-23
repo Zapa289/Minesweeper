@@ -20,7 +20,7 @@ class Minefield:
     self.rows = rows
     self.columns = columns
     self.number_of_mines = number_of_mines
-    self.minefield = self.generate_board()
+    self.proximity_matrix = self.generate_board()
 
   def generate_board(self) -> np.ndarray:
     """Create a 2D matrix of the Tile sprites."""
@@ -98,7 +98,7 @@ class Minefield:
     bottom_bound = row if row == self.rows - 1 else row + 1
 
     for row_index in range(top_bound,bottom_bound+1):
-      prox_row = self.minefield[row_index]
+      prox_row = self.proximity_matrix[row_index]
       for col_index in range(left_bound, right_bound+1):
         proximity = prox_row[col_index]
         if row_index == row and col_index == column:

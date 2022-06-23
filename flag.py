@@ -16,14 +16,15 @@ TEXT_X = COUNTER_X - FLAG_X
 TEXT_Y = COUNTER_Y
 TEXT_SIZE = (TEXT_X, TEXT_Y)
 
-FONT = 'lucidasans'
-FONT_SIZE = 20
+FONT = 'franklingothicmedium'
+FONT_SIZE = 25
+FONT_COLOR = (0,0,0)
 
 COLOR_KEY = (255, 53, 184)
 
 class FlagCounter:
   def __init__(self):
-    self.font = pygame.font.SysFont(FONT, FONT_SIZE, bold=True)
+    self.font = pygame.font.SysFont(FONT, FONT_SIZE)
 
     self.surf = pygame.surface.Surface(size=COUNTER_SIZE)
     self.surf.set_colorkey(COLOR_KEY)
@@ -37,7 +38,7 @@ class FlagCounter:
 
     self.surf.blit(self.flag_icon, self.flag_icon.get_rect())
 
-    font_surface = self.font.render(str(flags), False, (0, 0, 0), COLOR_KEY)
+    font_surface = self.font.render(str(flags), False, FONT_COLOR, COLOR_KEY)
     font_rect = font_surface.get_rect(right = COUNTER_X - FLAG_X, centery = COUNTER_Y // 2)
 
     self.text_surf.fill(COLOR_KEY)

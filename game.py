@@ -13,7 +13,7 @@ class Game:
     self.minefield = minefield
     self.renderer = renderer
 
-    self.timer = 0
+    self.time = 0
     self.timer_running = False
 
     self.clock = pygame.time.Clock()
@@ -21,12 +21,12 @@ class Game:
 
     self.flag_count = minefield.number_of_mines
 
-    self.renderer.create_field(self.minefield.minefield)
+    self.renderer.create_field(self.minefield.proximity_matrix)
 
     self.running = True
     self.gameover = False
 
-    self.renderer.update_flag_count(self.flag_count)
+    self.renderer.draw_tray(self.flag_count, self.time)
 
   def start_timer(self) -> None:
     if not self.timer_running:
@@ -34,8 +34,8 @@ class Game:
       pygame.time.set_timer(UPDATE_TIMER, 1000)
 
   def tick_timer(self) -> None:
-    self.timer += 1
-    self.renderer.update_timer(self.timer)
+    self.time += 1
+    self.renderer.draw_tray(self.flag_count, self.time)
 
   def handle_mouse_move(self, mouse_pos: tuple[float, float]) -> None:
     for tile in self.renderer.tiles:
@@ -74,7 +74,7 @@ class Game:
         is_flagged = tile.toggle_flag()
         self.flag_count = self.flag_count - 1 if is_flagged else self.flag_count + 1
         tile.update(self.renderer.screen)
-        self.renderer.update_flag_count(self.flag_count)
+        self.renderer.draw_tray(self.flag_count, self.time)
 
   def trigger_gameover(self):
     self.reveal_mines()

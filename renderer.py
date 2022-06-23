@@ -5,8 +5,7 @@ from numpy import ndarray
 from flag import FlagCounter
 from textures import Textures
 from tile import TILE_SIZE, Tile
-
-#from timer import Timer
+from timer import Timer
 
 DEFAULT_X = 400
 DEFAULT_Y = 500
@@ -15,17 +14,23 @@ TRAY_GAP = 50
 
 TL_MINE = (0, TRAY_GAP)
 
-FLAG_COUNTER_X = 20
-FLAG_COUNTER_Y = TRAY_GAP // 2
+EDGE_GAP = 20
+
+FLAG_POS_X = EDGE_GAP
+FLAG_POS_Y = TRAY_GAP // 2
+
+TIMER_POS_Y = TRAY_GAP // 2
 
 class Renderer:
   def __init__(self) -> None:
+    self.textures = Textures()
+
     self.tiles = pygame.sprite.Group()
     self.flag_counter = FlagCounter()
-    #self.timer = Timer()
+    self.timer = Timer()
+
     self.screen_size = (DEFAULT_X, DEFAULT_Y)
     self.screen = pygame.display.set_mode(self.screen_size)
-    self.textures = Textures()
 
     pygame.display.set_icon(self.textures.logo)
     pygame.display.set_caption("Minesweeper")
@@ -53,18 +58,23 @@ class Renderer:
     self.screen = pygame.display.set_mode(self.screen_size)
     self.screen.fill((255,255,255))
 
-    self.draw_tray()
+    self.draw_tray(0, 0)
 
     for tile in self.tiles:
       self.screen.blit(tile.surf, tile.rect)
 
     pygame.display.flip()
 
-  def draw_tray(self) -> None:
+  def draw_tray(self, flag_count: int, time: int) -> None:
     x_pos, _ = self.screen_size
     tray = self.textures.tray
     tray = pygame.transform.scale(tray, (x_pos, TRAY_GAP))
     self.screen.blit(tray, (0,0))
+
+    self.update_flag_count(flag_count=flag_count)
+    self.update_timer(time=time)
+
+    pygame.display.flip()
 
   def redraw_field(self) -> None:
     self.tiles.update()
@@ -86,13 +96,16 @@ class Renderer:
     pygame.display.flip()
 
   def update_timer(self, time: int) -> None:
-    pass
+    screen_x, _ = self.screen_size
+
+    timer_surface = self.timer.update(time)
+    timer_rect = timer_surface.get_rect(right = screen_x - EDGE_GAP, centery = TIMER_POS_Y)
+
+    self.screen.blit(timer_surface, timer_rect)
 
   def update_flag_count(self, flag_count: int) -> None:
     flag_counter_surface = self.flag_counter.update_flags(flag_count)
-    flag_counter_rect = flag_counter_surface.get_rect(left = FLAG_COUNTER_X, centery = FLAG_COUNTER_Y)
+    flag_counter_rect = flag_counter_surface.get_rect(left = FLAG_POS_X, centery = FLAG_POS_Y)
 
-    self.draw_tray()
     self.screen.blit(flag_counter_surface, flag_counter_rect)
-    pygame.display.flip()
 
